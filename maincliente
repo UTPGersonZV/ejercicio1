@@ -1,0 +1,67 @@
+package Cliente;
+
+import RMI.RemoteInterface;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
+public class MainCliente {
+
+    public static void main(String[] args) {
+        try{
+            int[] numeros = new int[4];
+            //INGRESO NUMEROS
+            for(int i=0;i<=3;i=i+1){
+                String num=JOptionPane.showInputDialog("Ingrese numero");
+                numeros[i]=Integer.parseInt(num);
+            }
+            
+            Registry miRegistro=LocateRegistry.getRegistry("127.0.0.1",1234);
+            RemoteInterface s=(RemoteInterface) miRegistro.lookup("Control");
+            //RESULTADOS
+            ArrayList<String> par = new ArrayList<>();
+            par=s.par(numeros);
+            ArrayList<String> impares = new ArrayList<>();
+            impares=s.impar(numeros);
+            ArrayList<String> primos = new ArrayList<>();
+            primos=s.primos(numeros);
+            ArrayList<String> negativos = new ArrayList<>();
+            negativos=s.negativos(numeros);
+            //IMPRIMIR LOS NUMEROS
+            String numpar="";
+            for(int i=0;i<par.size();i=i+1){
+                numpar=numpar + par.get(i)+",";
+            }
+            String numimpar="";
+            for(int i=0;i<impares.size();i=i+1){
+                numimpar=numimpar + impares.get(i)+",";
+            }
+            String numprimo="";
+            for(int i=0;i<primos.size();i=i+1){
+                numprimo=numprimo + primos.get(i)+",";
+            }
+            String numnegativos="";
+            for(int i=0;i<negativos.size();i=i+1){
+                numnegativos=numnegativos + negativos.get(i)+",";
+            }
+            //MOSTRAR
+            JOptionPane.showMessageDialog(null,"Numero Mayor: "+s.mayor(numeros));
+            JOptionPane.showMessageDialog(null,"Numero Menor: "+s.menor(numeros));
+            JOptionPane.showMessageDialog(null,"Cantidad de Numeros Par: "+par.size()+
+                                        "\nEstos son: "+numpar);
+            JOptionPane.showMessageDialog(null,"Cantidad de Numeros Impares: "+impares.size()+
+                                        "\nEstos son: "+numimpar);
+            JOptionPane.showMessageDialog(null,"Cantidad de Numeros Primos: "+primos.size()+
+                                        "\nEstos son: "+numprimo);
+            JOptionPane.showMessageDialog(null,"Cantidad de Numeros Negativos: "+negativos.size()+
+                                        "\nEstos son: "+numnegativos);
+            
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+}
